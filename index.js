@@ -4,6 +4,8 @@ let obj = {
     canal: 7,
     mudo: false
 }
+let volumenMudo = 3;
+
 const ERROR_APAGADA = "La televisión está apagada";
 const ERROR_VOLUMEN_MAXIMO = "Volumen al máximo";
 const ERROR_VOLUMEN_MINIMO = "Volumen al minimo";
@@ -11,8 +13,19 @@ const ERROR_CANAL_MAXIMO = "No hay más canales";
 const ERROR_CANAL_MINIMO = "No hay menos canales";
 
 const cambiarEncendido =()=>{
+    let div = document.getElementById("btnEncendido");
+
     obj.encendido = !obj.encendido;
     if(!obj.encendido){
+        document.getElementById("btnVolumenMas").className = "btn btn-primary disabled";
+        document.getElementById("btnVolumenMenos").className = "btn btn-primary disabled";
+        document.getElementById("btnCanalMas").className = "btn btn-primary disabled";
+        document.getElementById("btnCanalMenos").className = "btn btn-primary disabled";
+        document.getElementById("btnSilenciar").className = "btn btn-primary disabled";
+        $("#canal").text("");
+        $("#volumen").text("");
+        $("#alerta").text("");
+        div.className = "btn btn-danger";
         imprimirObjeto();
         obj = {
             encendido: false,
@@ -20,9 +33,19 @@ const cambiarEncendido =()=>{
             canal: 7,
             mudo: false
         }
+
         return;
     }
+
+    document.getElementById("btnVolumenMas").className = "btn btn-primary";
+    document.getElementById("btnVolumenMenos").className = "btn btn-primary";
+    document.getElementById("btnCanalMas").className = "btn btn-primary";
+    document.getElementById("btnCanalMenos").className = "btn btn-primary";
+    document.getElementById("btnSilenciar").className = "btn btn-primary";
+    div.className = "btn btn-success";
     imprimirObjeto();
+    $("#canal").text(`Canal: ${obj.canal}`);
+    $("#volumen").text(`Volumen: ${obj.volumen}`);
 }
 
 const subirVolumen = ()=>{
@@ -32,8 +55,11 @@ const subirVolumen = ()=>{
     }
 
     if(obj.mudo){
+        obj.volumen = volumenMudo;
         obj.mudo = false;
         imprimirObjeto();
+        $("#alerta").text(``);
+        $("#volumen").text(`Volumen: ${obj.volumen}`);
         return;
     }
     if(obj.volumen == 10){
@@ -42,6 +68,7 @@ const subirVolumen = ()=>{
     }
 
     obj.volumen++;
+    $("#volumen").text(`Volumen: ${obj.volumen}`);
     imprimirObjeto();
 }
 
@@ -51,8 +78,11 @@ const bajarVolumen = ()=>{
         return;
     }
     if(obj.mudo){
+        obj.volumen = volumenMudo;
         obj.mudo = false;
         imprimirObjeto();
+        $("#alerta").text(``);
+        $("#volumen").text(`Volumen: ${obj.volumen}`);
         return;
     }
     if(obj.volumen == 1){
@@ -61,6 +91,7 @@ const bajarVolumen = ()=>{
     }
 
     obj.volumen--;
+    $("#volumen").text(`Volumen: ${obj.volumen}`);
     imprimirObjeto();
 }
 
@@ -75,6 +106,7 @@ const subirCanal = ()=>{
     }
 
     obj.canal++;
+    $("#canal").text(`Canal: ${obj.canal}`);
     imprimirObjeto();
 }
 
@@ -90,6 +122,7 @@ const bajarCanal = ()=>{
     }
 
     obj.canal--;
+    $("#canal").text(`Canal: ${obj.canal}`);
     imprimirObjeto();
 }
 
@@ -99,9 +132,25 @@ const silenciar = ()=>{
         return;
     }
     obj.mudo = !obj.mudo;
+
+    if(obj.mudo){
+        volumenMudo = obj.volumen;
+        obj.volumen = 0;
+        $("#volumen").text(`Volumen: 0`);
+        $("#alerta").text(`El sonido está silenciado`);
+    }else{
+        obj.volumen = volumenMudo;
+        $("#alerta").text(``);
+        $("#volumen").text(`Volumen: ${obj.volumen}`);
+    }
+    
     imprimirObjeto();
 }
 
 const imprimirObjeto = ()=>{
-    console.log(obj);
+    console.log("-------------------------------")
+    for (const property in obj) {
+        console.log(`${property}: ${obj[property]}`);
+    }
+    console.log("-------------------------------")
 }
